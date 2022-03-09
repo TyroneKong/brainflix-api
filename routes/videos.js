@@ -1,4 +1,3 @@
-const e = require("express");
 const express = require("express");
 const fs = require("fs");
 const router = express.Router();
@@ -23,6 +22,12 @@ router.get("/videos/:id", (req, res) => {
       const videoObj = JSON.parse(data);
       res.send(videoObj.filter((video) => video.id === req.params.id));
     }
+  });
+});
+
+router.post("./videos/:id", (req, res) => {
+  fs.readFile("./data/videos.json", "utf-8", (err, data) => {
+    const videoObj = JSON.parse(data);
   });
 });
 
