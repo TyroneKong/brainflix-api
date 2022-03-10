@@ -21,6 +21,7 @@ router.get("/videos/:id", (req, res) => {
     const foundVideo = JSON.parse(data).find(
       (video) => video.id === req.params.id
     );
+    console.log(foundVideo);
     if (foundVideo) {
       res.send(foundVideo);
     } else {
@@ -29,14 +30,46 @@ router.get("/videos/:id", (req, res) => {
   });
 });
 
+//comments
+router.post("/comments/:id", (req, res) => {
+  fs.readFile("./data/videos.json", "utf-8", (err, data) => {
+    const allData = JSON.parse(data);
+    const foundVideo = JSON.parse(data).find(
+      (video) => video.id === req.params.id
+    );
+    const commentsArray = foundVideo.comments;
+    const newComment = {
+      id: uuidv4(),
+      name: `user:${Math.floor(Math.random() * 1000)}`,
+      comment: req.body.comment,
+      likes: 0,
+      timestamp: +new Date(),
+    };
+    commentsArray.push(newComment);
+
+    fs.writeFile(
+      "./data/videos.json",
+
+      JSON.stringify(commentsArray),
+      () => {
+        res.json({
+          message: "data written to file",
+          data: commentsArray,
+        });
+      }
+    );
+  });
+});
+
+//post videos
 router.post("/videos", (req, res) => {
   fs.readFile("./data/videos.json", "utf-8", (err, data) => {
     const videoObj = JSON.parse(data);
     const newVideo = {
       id: uuidv4(),
       title: req.body.title,
-      channel: "movies trailers",
-      image: "http://localhost:8180/images/batman.jpeg",
+      channel: "Fashion",
+      image: "http://localhost:8180/images/fashion.jpg",
       description: req.body.description,
       views: "1,501,023",
       likes: "310,985",
@@ -47,21 +80,21 @@ router.post("/videos", (req, res) => {
         {
           id: uuidv4(),
           name: "Jason Coleman",
-          comment: "absolutely amazing",
+          comment: "Loved the video",
           likes: 0,
           timestamp: 1628522461000,
         },
         {
           id: uuidv4(),
-          name: "Gary Wong",
-          comment: "not better than Bale",
+          name: "Kate Wilson",
+          comment: "Cant wait for summer",
           likes: 0,
           timestamp: 1626359541000,
         },
         {
-          id: "66b7d3c7-4023-47f1-a02c-520c9ca187a6",
-          name: "Theodore Duncan",
-          comment: "pleasantly surpried",
+          id: uuidv4(),
+          name: "Gerry Smith",
+          comment: "I need to buy some spring wear",
           likes: 0,
           timestamp: 1626011132000,
         },
