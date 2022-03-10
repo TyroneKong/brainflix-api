@@ -31,13 +31,13 @@ router.get("/videos/:id", (req, res) => {
 });
 
 //comments
-router.post("/comments/:id", (req, res) => {
+router.post("/videos/:id", (req, res) => {
   fs.readFile("./data/videos.json", "utf-8", (err, data) => {
     const allData = JSON.parse(data);
-    const foundVideo = JSON.parse(data).find(
+    const foundVideoIndex = JSON.parse(data).findIndex(
       (video) => video.id === req.params.id
     );
-    const commentsArray = foundVideo.comments;
+    const commentsArray = allData[foundVideoIndex].comments;
     const newComment = {
       id: uuidv4(),
       name: `user:${Math.floor(Math.random() * 1000)}`,
@@ -50,7 +50,7 @@ router.post("/comments/:id", (req, res) => {
     fs.writeFile(
       "./data/videos.json",
 
-      JSON.stringify(commentsArray),
+      JSON.stringify(allData),
       () => {
         res.json({
           message: "data written to file",
