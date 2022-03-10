@@ -29,9 +29,19 @@ router.get("/videos/:id", (req, res) => {
   });
 });
 
-router.post("./videos/:id", (req, res) => {
+router.post("/comments/:id", (req, res) => {
   fs.readFile("./data/videos.json", "utf-8", (err, data) => {
-    const videoObj = JSON.parse(data);
+    const videoObj = JSON.parse(data.comments).find(
+      (comment) => comment === req.params.id
+    );
+    const newComment = {
+      id: 1,
+      comment: req.body.name,
+    };
+    videoObj.push(newComment);
+    fs.writeFile("./data/videos.json", "utf-8", (err, data) => {
+      res.json({ message: "data written to file", data: videoObj });
+    });
   });
 });
 
