@@ -1,7 +1,6 @@
 const express = require("express");
 const fs = require("fs");
 const router = express.Router();
-const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
 //videos route
 router.get("/videos", (req, res) => {
@@ -30,8 +29,8 @@ router.get("/videos/:id", (req, res) => {
   });
 });
 
-//comments
-router.post("/videos/:id", (req, res) => {
+// posting comments
+router.post("/videos/:id/comments", (req, res) => {
   fs.readFile("./data/videos.json", "utf-8", (err, data) => {
     const allData = JSON.parse(data);
     const foundVideoIndex = JSON.parse(data).findIndex(
